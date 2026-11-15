@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Task Colors for Google Calendar",
+  "version": "1.0.0",
+  "description": "Color your Google Tasks on Google Calendar by list, or give any single task its own color.",
+  "minimum_chrome_version": "111",
+  "permissions": [
+    "storage"
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_title": "Task Colors for Google Calendar",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://calendar.google.com/*",
+        "https://tasks.google.com/*"
+      ],
+      "js": [
+        "src/parser.js",
+        "src/inject.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "https://calendar.google.com/*",
+        "https://tasks.google.com/*"
+      ],
+      "js": [
+        "src/colors.js",
+        "src/store.js",
+        "src/picker.js",
+        "src/menu.js",
+        "src/content.js",
+        "src/list-header.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}

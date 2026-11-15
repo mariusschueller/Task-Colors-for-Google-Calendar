@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy – Task Colors for Google Calendar</title>
+<style>
+  :root { --bg: #ffffff; --fg: #1f1f1f; --muted: #5f6368; --line: #e3e5e8; --accent: #0b57d0; --box: #f3f6fc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1e1f20; --fg: #e3e3e3; --muted: #9aa0a6; --line: #3c4043; --accent: #a8c7fa; --box: #28292a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.65 Roboto, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 48px 20px 64px; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 6px; }
+  h2 { font-size: 19px; margin: 34px 0 8px; }
+  p, li { color: var(--fg); }
+  .muted { color: var(--muted); font-size: 14px; margin: 0 0 28px; }
+  .summary { background: var(--box); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .summary p { margin: 0; }
+  ul { padding-left: 22px; }
+  li { margin: 6px 0; }
+  a { color: var(--accent); }
+  code { font-size: 14px; }
+  footer { margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Privacy Policy</h1>
+  <p class="muted">Task Colors for Google Calendar · Effective November 14, 2026</p>
+
+  <div class="summary">
+    <p><strong>In short:</strong> the extension doesn’t send your data anywhere. It reads your task and list names on Google Calendar only to color your tasks, and keeps everything in your browser. There are no servers, analytics, ads or tracking.</p>
+  </div>
+
+  <h2>What the extension accesses</h2>
+  <p>The extension only runs on <code>calendar.google.com</code> and <code>tasks.google.com</code>. There, it reads task data that Google Calendar and Google Tasks have already loaded into the page:</p>
+  <ul>
+    <li>the names and IDs of your task lists</li>
+    <li>the IDs, titles and due dates of your tasks, and which list each task belongs to</li>
+  </ul>
+  <p>It uses this only to work out which list each task belongs to, so it can show the task in that list’s color, and to show your lists and tasks in the extension’s settings popup. It also saves the colors you choose.</p>
+  <p>The extension doesn’t use the Google Tasks API, doesn’t ask for access to your Google account, and doesn’t make any network requests of its own.</p>
+
+  <h2>Where your data is stored</h2>
+  <p>Your color choices and a copy of your list and task names are stored on your device in the extension’s local storage (<code>chrome.storage.local</code>). This data:</p>
+  <ul>
+    <li>is never sent to the developer or to any third party</li>
+    <li>is not synced to other devices</li>
+    <li>is not sold, shared, or used for advertising, profiling or any purpose other than coloring your tasks</li>
+  </ul>
+
+  <h2>Diagnostics</h2>
+  <p>The settings popup has a “Copy diagnostics” button for troubleshooting. When you click it, the extension builds a technical report and copies it to your clipboard. The report may include task IDs, a few task titles, and details of the page’s structure. Nothing is sent automatically: the report only goes where you paste it.</p>
+
+  <h2>Permissions</h2>
+  <ul>
+    <li><strong>Storage:</strong> to save your color choices and the local copy of your list and task names.</li>
+    <li><strong>Access to calendar.google.com and tasks.google.com:</strong> to read which list each task belongs to and to color tasks on those pages. The extension doesn’t run on any other website.</li>
+  </ul>
+
+  <h2>Keeping and deleting your data</h2>
+  <p>Data stays on your device until you remove it. “Clear task cache” in the settings popup deletes the stored list and task names. Uninstalling the extension deletes all of its data, including your colors.</p>
+
+  <h2>Limited Use</h2>
+  <p>The use of information the extension accesses complies with the <a href="https://developer.chrome.com/docs/webstore/program-policies/limited-use">Chrome Web Store User Data Policy</a>, including the Limited Use requirements.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If this policy changes, the updated version will be posted on this page with a new effective date.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy: [YOUR CONTACT EMAIL OR SUPPORT PAGE]</p>
+
+  <footer>Task Colors for Google Calendar is an independent extension and is not affiliated with, endorsed by, or sponsored by Google. Google Calendar and Google Tasks are trademarks of Google LLC.</footer>
+</main>
+</body>
+</html>

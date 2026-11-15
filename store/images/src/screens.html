@@ -1,0 +1,274 @@
+<!doctype html>
+<!--
+  Source for the Chrome Web Store images. Rendered by scripts/render-store-images.js:
+    screens.html?s=1..4      -> 1280x800 screenshots
+    screens.html?s=promo     -> 440x280 small promo tile
+    screens.html?s=marquee   -> 1400x560 marquee promo tile
+  The color menu and "● ▾" buttons are the extension's real components
+  (src/colors.js + src/picker.js); calendar scenes are simplified illustrations.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Store images</title>
+<script src="../../../src/colors.js"></script>
+<script src="../../../src/picker.js"></script>
+<style>
+:root{
+  --ink:#1f1f1f; --muted:#5f6368; --bg:#f3f6fc; --accent:#0b57d0;
+  --dark:#1e1f20; --dark-2:#28292a; --dark-line:#3c4043; --dark-fg:#e3e3e3; --dark-muted:#9aa0a6;
+  --work:#4285f4; --personal:#33b679; --school:#f4511e; --custom:#e67c73;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Roboto,"Ubuntu Sans","Noto Sans",sans-serif;color:var(--ink);background:var(--bg);overflow:hidden}
+
+/* ---- screenshot frame: copy left, scene right ---- */
+.shot{width:1280px;height:800px;display:grid;grid-template-columns:440px 1fr;align-items:center;gap:40px;padding:0 64px 0 72px;
+  background:radial-gradient(1200px 700px at 100% 0%,#e8f0fe 0%,transparent 60%),radial-gradient(900px 600px at 0% 100%,#fdeee9 0%,transparent 55%),var(--bg)}
+.eyebrow{display:flex;align-items:center;gap:12px;font:500 15px/1 Roboto,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.eyebrow img{width:36px;height:36px}
+h1{font:700 46px/1.12 Roboto,sans-serif;margin:22px 0 18px;letter-spacing:-.01em}
+.lede{font:400 20px/1.5 Roboto,sans-serif;color:#3c4043;margin:0 0 26px}
+ul.points{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+ul.points li{display:flex;gap:12px;align-items:flex-start;font:400 18px/1.45 Roboto,sans-serif;color:#3c4043}
+ul.points .b{flex:none;width:12px;height:12px;border-radius:50%;margin-top:7px}
+
+.scene{position:relative;height:640px}
+.window{position:absolute;inset:0;border-radius:20px;background:var(--dark);color:var(--dark-fg);overflow:hidden;
+  box-shadow:0 30px 60px -20px rgba(31,31,31,.45),0 0 0 1px rgba(0,0,0,.06)}
+
+/* ---- simplified week grid ---- */
+.grid{position:absolute;inset:0;display:grid;grid-template-columns:56px repeat(7,1fr);grid-template-rows:72px 44px repeat(8,1fr)}
+.grid .dayh{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-bottom:1px solid var(--dark-line);
+  font:500 12px/1 Roboto,sans-serif;color:var(--dark-muted);letter-spacing:.06em}
+.grid .dayh b{font:400 24px/1 Roboto,sans-serif;color:var(--dark-fg);letter-spacing:0}
+.grid .dayh.today b{background:#a8c7fa;color:#062e6f;border-radius:50%;width:40px;height:40px;display:grid;place-items:center}
+.grid .allday{border-bottom:1px solid var(--dark-line);border-left:1px solid var(--dark-line);padding:6px 4px}
+.grid .cell{border-left:1px solid var(--dark-line);border-bottom:1px solid #2f3133}
+.grid .hour{font:400 11px/1 Roboto,sans-serif;color:var(--dark-muted);text-align:right;padding:4px 8px 0 0}
+.chip{position:absolute;display:flex;align-items:center;gap:6px;height:26px;padding:0 8px;border-radius:6px;
+  font:500 13px/1 Roboto,sans-serif;white-space:nowrap;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.chip svg{flex:none;width:15px;height:15px;fill:currentColor}
+.chip span{overflow:hidden;text-overflow:ellipsis}
+
+/* ---- legend ---- */
+.legend{position:absolute;right:20px;bottom:18px;display:flex;gap:16px;padding:10px 14px;border-radius:12px;background:rgba(40,41,42,.92);
+  font:500 13px/1 Roboto,sans-serif;color:var(--dark-fg)}
+.legend span{display:flex;align-items:center;gap:7px}
+.legend i{width:12px;height:12px;border-radius:50%}
+
+/* ---- details card ---- */
+.card{position:absolute;left:70px;top:70px;width:470px;padding:22px 26px 26px;border-radius:24px;background:#2d2e30;color:var(--dark-fg);
+  box-shadow:0 24px 48px rgba(0,0,0,.45)}
+.card .tools{display:flex;justify-content:flex-end;gap:22px;color:var(--dark-muted);font-size:18px;margin-bottom:6px}
+.card .row{display:grid;grid-template-columns:44px 1fr;align-items:center}
+.card .title{font:400 26px/1.3 Roboto,sans-serif}
+.card .when{grid-column:2;font:400 15px/1.5 Roboto,sans-serif;color:#c4c7c5}
+.card .line{grid-column:2;margin-top:14px;font:400 14px/1.5 Roboto,sans-serif;color:var(--dark-muted)}
+
+/* ---- tasks side panel ---- */
+.panel{position:absolute;z-index:2;right:0;top:0;bottom:0;width:380px;background:#1b1b1c;border-left:1px solid var(--dark-line);padding:18px 20px}
+.panel .label{font:500 12px/1 Roboto,sans-serif;letter-spacing:.1em;color:var(--dark-muted)}
+.panel .head{position:relative;display:flex;align-items:center;margin-top:8px;height:40px}
+.panel .switch{display:flex;align-items:center;justify-content:space-between;width:150px;font:400 24px/1 Roboto,sans-serif}
+.panel .switch svg{width:22px;height:22px;fill:currentColor}
+.panel .icons{margin-left:auto;display:flex;gap:22px;color:var(--dark-muted);font-size:18px}
+.panel .add{margin-top:26px;padding-top:16px;border-top:1px solid var(--dark-line);color:#a8c7fa;font:500 16px/1 Roboto,sans-serif;display:flex;gap:12px;align-items:center}
+.panel .task{display:flex;gap:14px;align-items:flex-start;margin-top:22px;font:400 16px/1.3 Roboto,sans-serif}
+.panel .task svg{flex:none;width:22px;height:22px;fill:var(--dark-muted)}
+.panel .task small{display:block;margin-top:6px;color:var(--dark-muted);font-size:13px}
+
+/* ---- popup capture ---- */
+.popupframe{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:14px;overflow:hidden;
+  box-shadow:0 30px 60px -20px rgba(31,31,31,.5),0 0 0 1px rgba(0,0,0,.08)}
+.popupframe img{display:block;width:380px}
+
+/* ---- promo tiles ---- */
+.promo{width:440px;height:280px;display:flex;flex-direction:column;justify-content:center;padding:0 34px;color:#fff;
+  background:linear-gradient(135deg,#0b57d0 0%,#3f51b5 55%,#8e24aa 100%);position:relative;overflow:hidden}
+.promo .top{display:flex;align-items:center;gap:16px}
+.promo img{width:72px;height:72px;filter:drop-shadow(0 6px 12px rgba(0,0,0,.25))}
+.promo .name{font:700 30px/1.05 Roboto,sans-serif}
+.promo .for{font:500 15px/1.2 Roboto,sans-serif;opacity:.85;margin-top:4px}
+.promo .tag{margin-top:22px;font:400 17px/1.4 Roboto,sans-serif;opacity:.95}
+.promo .dots{position:absolute;right:-30px;bottom:-34px;display:grid;grid-template-columns:repeat(4,34px);gap:10px;opacity:.9;transform:rotate(-12deg)}
+.promo .dots i{width:34px;height:34px;border-radius:50%}
+
+.marquee{width:1400px;height:560px;display:grid;grid-template-columns:520px 1fr;align-items:center;gap:40px;padding:0 60px 0 80px;color:#fff;
+  background:linear-gradient(120deg,#0b57d0 0%,#3f51b5 50%,#8e24aa 100%);overflow:hidden}
+.marquee .top{display:flex;align-items:center;gap:18px}
+.marquee img{width:84px;height:84px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.3))}
+.marquee .name{font:700 40px/1.05 Roboto,sans-serif}
+.marquee .for{font:500 18px/1.2 Roboto,sans-serif;opacity:.85;margin-top:6px}
+.marquee .tag{font:400 22px/1.45 Roboto,sans-serif;opacity:.95;margin-top:26px}
+.marquee .scene{height:440px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const P = window.RCCPicker;
+const C = window.RCCColors;
+document.head.appendChild(Object.assign(document.createElement('style'), { textContent: P.CSS }));
+
+const ICON = '../../../icons/icon128.png';
+const CIRCLE = 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z';
+const CARET = 'M7 10l5 5 5-5z';
+const svg = (d) => `<svg viewBox="0 0 24 24"><path d="${d}"/></svg>`;
+const h = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
+const LISTS = { work: ['Work', 'var(--work)', '#4285f4'], personal: ['Personal', 'var(--personal)', '#33b679'], school: ['School', 'var(--school)', '#f4511e'] };
+
+function copy({ title, lede, points }) {
+  return `<div>
+    <div class="eyebrow"><img src="${ICON}" alt="">Task Colors for Google Calendar</div>
+    <h1>${title}</h1>
+    <p class="lede">${lede}</p>
+    <ul class="points">${points.map(([c, t]) => `<li><span class="b" style="background:${c}"></span><span>${t}</span></li>`).join('')}</ul>
+  </div>`;
+}
+
+// Simplified week view with colored task chips. tasks: [day 0-6, row (-1 = all-day), list|hex, title]
+function week(tasks, { legend = true, width } = {}) {
+  const win = h('<div class="window"></div>');
+  const grid = h('<div class="grid"></div>');
+  const days = [['MON', 10], ['TUE', 11], ['WED', 12], ['THU', 13], ['FRI', 14], ['SAT', 15], ['SUN', 16]];
+  grid.appendChild(h('<div></div>'));
+  days.forEach(([d, n], i) => grid.appendChild(h(`<div class="dayh${i === 4 ? ' today' : ''}">${d}<b>${n}</b></div>`)));
+  grid.appendChild(h('<div class="hour" style="padding-top:14px">all-day</div>'));
+  for (let i = 0; i < 7; i++) grid.appendChild(h('<div class="allday"></div>'));
+  const hours = ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'];
+  for (const hr of hours) {
+    grid.appendChild(h(`<div class="hour">${hr}</div>`));
+    for (let i = 0; i < 7; i++) grid.appendChild(h('<div class="cell"></div>'));
+  }
+  win.appendChild(grid);
+  requestAnimationFrame(() => {
+    const cells = grid.children;
+    const colW = (grid.clientWidth - 56) / 7;
+    const rowH = (grid.clientHeight - 72 - 44) / 8;
+    for (const [day, row, list, title] of tasks) {
+      const color = LISTS[list] ? LISTS[list][2] : list;
+      const x = 56 + day * colW + 4;
+      const y = row < 0 ? 72 + 9 : 72 + 44 + row * rowH + 4;
+      const chip = h(`<div class="chip">${svg(CIRCLE)}<span>${title}</span></div>`);
+      Object.assign(chip.style, { left: `${x}px`, top: `${y}px`, width: `${colW - 8}px`, background: color, color: C.textOn(color) });
+      win.appendChild(chip);
+    }
+  });
+  if (legend) {
+    win.appendChild(h(`<div class="legend">${Object.values(LISTS).map(([n, c]) => `<span><i style="background:${c}"></i>${n}</span>`).join('')}</div>`));
+  }
+  return win;
+}
+
+// Short titles so they fit the narrow day columns.
+const WEEK_TASKS = [
+  [0, 0, 'work', 'Report'], [0, -1, 'personal', 'Plants'], [1, 2, 'school', 'Reading'],
+  [1, 5, 'work', 'PR review'], [2, -1, 'school', 'Essay'], [2, 1, 'personal', 'Gym'],
+  [3, 3, 'work', 'Team sync'], [3, 6, 'personal', 'Dentist'], [4, 0, 'school', 'Lab'],
+  [4, 4, 'work', 'Roadmap'], [4, -1, 'personal', 'Pay rent'], [5, 2, 'personal', 'Groceries'],
+  [6, 1, 'school', 'Quiz prep'], [6, 5, 'personal', 'Plan week'],
+];
+
+function menuFor(value, fallback, opts = {}) {
+  const m = P.create({ value, fallback, dark: true, onPick: () => {}, ...opts });
+  m.classList.add('rcc-floating');
+  m.style.position = 'absolute';
+  return m;
+}
+
+function trigger(color) {
+  const t = P.trigger({ onClick: () => {} });
+  t.setColor(color);
+  return t;
+}
+
+const s = new URLSearchParams(location.search).get('s') || '1';
+const root = document.getElementById('root');
+
+if (s === '1') {
+  root.appendChild(h(`<div class="shot">${copy({
+    title: 'Color your tasks by list',
+    lede: 'Tell work, school and personal to-dos apart at a glance. Every task takes its list’s color.',
+    points: [['var(--work)', 'Pick a color once per task list'], ['var(--personal)', 'Google Calendar’s 24 colors, plus any custom color'], ['var(--school)', 'Works in day, week and month views']],
+  })}<div class="scene"></div></div>`));
+  root.querySelector('.scene').appendChild(week(WEEK_TASKS));
+}
+
+if (s === '2') {
+  root.appendChild(h(`<div class="shot">${copy({
+    title: 'Give any task its own color',
+    lede: 'Click a task, then the color circle in its details. A custom color overrides the list color.',
+    points: [['var(--custom)', 'Highlight the tasks that matter most'], ['#8e24aa', 'Pick “Default” to go back to the list color'], ['#0b8043', 'Changes show up instantly']],
+  })}<div class="scene"></div></div>`));
+  const scene = root.querySelector('.scene');
+  const bg = week(WEEK_TASKS.map((t) => (t[3] === 'Dentist' ? [t[0], t[1], '#e67c73', t[3]] : t)), { legend: false });
+  bg.style.filter = 'brightness(.55)';
+  scene.appendChild(bg);
+  const card = h(`<div class="card">
+      <div class="tools"><span>✎</span><span>🗑</span><span>✕</span></div>
+      <div class="row"><span class="slot"></span><span class="title">Call dentist</span>
+        <span class="when">Thursday, November 13 · 3 PM</span>
+        <span class="line">Personal</span></div></div>`);
+  card.querySelector('.slot').appendChild(trigger('#e67c73'));
+  scene.appendChild(card);
+  // Shown just below the card so the task's details stay readable.
+  const m = menuFor('#e67c73', '#33b679', { cols: 13 });
+  requestAnimationFrame(() => {
+    Object.assign(m.style, { left: '82px', top: `${card.offsetTop + card.offsetHeight + 10}px` });
+  });
+  scene.appendChild(m);
+}
+
+if (s === '3') {
+  root.appendChild(h(`<div class="shot">${copy({
+    title: 'Set list colors right from the Tasks panel',
+    lede: 'Open Tasks in Google Calendar and use the color button next to the list name.',
+    points: [['var(--work)', 'Follows you as you switch lists'], ['var(--personal)', 'Every task in the list updates at once'], ['var(--school)', 'Or manage all lists from the toolbar popup']],
+  })}<div class="scene"></div></div>`));
+  const scene = root.querySelector('.scene');
+  const bg = week(WEEK_TASKS, { legend: false });
+  scene.appendChild(bg);
+  const panel = h(`<div class="panel">
+      <div class="label">TASKS</div>
+      <div class="head"><div class="switch"><span>Work</span>${svg(CARET)}</div><span class="slot" style="margin-left:10px"></span>
+        <div class="icons"><span>⧉</span><span>✕</span></div></div>
+      <div class="add"><span style="font-size:20px">⊕</span>Add a task</div>
+      <div class="task">${svg(CIRCLE)}<div>Send weekly report<small>Mon</small></div></div>
+      <div class="task">${svg(CIRCLE)}<div>Review pull request<small>Tue</small></div></div>
+      <div class="task">${svg(CIRCLE)}<div>Prep team sync<small>Thu</small></div></div>
+      <div class="task">${svg(CIRCLE)}<div>Update roadmap<small>Fri</small></div></div></div>`);
+  panel.querySelector('.slot').appendChild(trigger('#4285f4'));
+  bg.appendChild(panel);
+  const m = menuFor('#4285f4', null, { cols: 10 });
+  Object.assign(m.style, { right: '24px', top: '74px', zIndex: 3 });
+  bg.appendChild(m);
+}
+
+if (s === '4') {
+  root.appendChild(h(`<div class="shot">${copy({
+    title: 'Everything in one place',
+    lede: 'The toolbar popup lists your task lists and tasks, so you can set colors without hunting for them.',
+    points: [['var(--work)', 'Search tasks by title, list or date'], ['var(--personal)', 'Turn coloring on or off with one switch'], ['var(--school)', 'Private: nothing leaves your browser']],
+  })}<div class="scene"><div class="popupframe"><img src="popup-capture.png" alt=""></div></div></div>`));
+}
+
+if (s === 'promo') {
+  root.appendChild(h(`<div class="promo">
+    <div class="top"><img src="${ICON}" alt=""><div><div class="name">Task Colors</div><div class="for">for Google Calendar</div></div></div>
+    <div class="tag">Color your tasks by list,<br>or give any task its own color.</div>
+    <div class="dots">${['#d50000', '#f6bf26', '#33b679', '#039be5', '#e67c73', '#f4511e', '#0b8043', '#7986cb', '#8e24aa', '#f09300', '#4285f4', '#c0ca33'].map((c) => `<i style="background:${c}"></i>`).join('')}</div>
+  </div>`));
+}
+
+if (s === 'marquee') {
+  root.appendChild(h(`<div class="marquee"><div>
+      <div class="top"><img src="${ICON}" alt=""><div><div class="name">Task Colors</div><div class="for">for Google Calendar</div></div></div>
+      <div class="tag">Color your Google Tasks by list, or give any single task its own color — right inside Google Calendar.</div>
+    </div><div class="scene"></div></div>`));
+  root.querySelector('.scene').appendChild(week(WEEK_TASKS));
+}
+</script>
+</body>
+</html>

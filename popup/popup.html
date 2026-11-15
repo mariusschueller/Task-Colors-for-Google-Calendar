@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Task Colors for Google Calendar</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <h1>Task Colors for Google Calendar</h1>
+    <label class="switch" title="Enable coloring">
+      <input type="checkbox" id="enabled">
+      <span class="track"></span>
+    </label>
+  </header>
+
+  <p id="status" class="muted"></p>
+
+  <section>
+    <h2>Lists</h2>
+    <div id="lists"></div>
+  </section>
+
+  <section>
+    <h2>Tasks</h2>
+    <div class="search-row">
+      <input type="search" id="search" placeholder="Search tasks…" autocomplete="off">
+      <label class="check"><input type="checkbox" id="onlyCustom"> Custom only</label>
+    </div>
+    <div id="tasks"></div>
+  </section>
+
+  <footer>
+    <label class="check"><input type="checkbox" id="debug"> Debug logging</label>
+    <span>
+      <button type="button" id="copyDiag" class="link">Copy diagnostics</button>
+      ·
+      <button type="button" id="clearIndex" class="link">Clear task cache</button>
+    </span>
+  </footer>
+
+  <script src="../src/colors.js"></script>
+  <script src="../src/store.js"></script>
+  <script src="../src/picker.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
