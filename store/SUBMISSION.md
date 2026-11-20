@@ -6,6 +6,14 @@ Everything the [Developer Dashboard](https://chrome.google.com/webstore/devconso
 - [ ] **Host the privacy policy.** Upload `store/privacy-policy.html` somewhere public: your own website, GitHub Pages, or any static host. First replace `[YOUR CONTACT EMAIL OR SUPPORT PAGE]` near the bottom. You'll paste its URL in the **Privacy** tab.
 - [ ] **Build the package** (already built for 1.0.0): `python3 scripts/package.py` → `dist/task-colors-for-google-calendar-1.0.0.zip`
 
+## Publishing an update
+For a new version of an item that's already in the store:
+1. Raise `"version"` in `manifest.json`. The store rejects a package whose version isn't higher than the published one.
+2. Build: `python3 scripts/package.py` → `dist/task-colors-for-google-calendar-<version>.zip`
+3. Dashboard → open the item → **Package** → **Upload new package** → choose the zip.
+4. If the listing or privacy text below changed, paste the new text into the **Store listing** / **Privacy** tabs.
+5. **Submit for review.** Users get the new version automatically once it's approved and published.
+
 ---
 
 ## 1. Package
@@ -24,7 +32,7 @@ The name, summary, version and icons come from `manifest.json`:
 Google Calendar shows every task in the same color. Task Colors for Google Calendar lets you color tasks by task list, or give any single task its own color, so you can tell work, school and personal to-dos apart at a glance.
 
 COLOR BY LIST
-Open the Tasks panel in Google Calendar and click the color button next to the list name. Every task in that list takes on the color, in day, week and month views.
+In Google Calendar's Tasks panel, or on tasks.google.com, click the color button next to a list's name. Every task in that list takes on the color on your calendar, in day, week and month views.
 
 COLOR A SINGLE TASK
 Click a task on your calendar, then click the color circle at the top left of its details. A task's own color overrides its list color, and "Default" switches it back.

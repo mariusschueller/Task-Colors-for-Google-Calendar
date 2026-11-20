@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Task Colors for Google Calendar",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Color your Google Tasks on Google Calendar by list, or give any single task its own color.",
   "minimum_chrome_version": "111",
   "permissions": [
