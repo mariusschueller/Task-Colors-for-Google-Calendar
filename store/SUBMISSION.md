@@ -73,7 +73,7 @@ Saves the user's color choices (per task list and per task) and a local copy of 
 
 **Host permission justification** (the content scripts on calendar.google.com and tasks.google.com)
 ```
-The extension's single purpose happens on these two sites. On calendar.google.com it recolors task chips and adds a color button to a task's details. On tasks.google.com (the Tasks side panel embedded in Google Calendar) it adds a color button next to the list name. On both, it reads the task data the page already loads (task IDs, titles and list membership) to know which list each task belongs to. It runs on no other sites.
+The extension's single purpose happens on these two sites. On calendar.google.com it recolors task chips and adds a color button to a task's details. On tasks.google.com (the Tasks side panel embedded in Google Calendar, and the full Google Tasks site) it adds a color button next to each list name. On both, it reads the task data the page already loads (task IDs, titles and list membership) to know which list each task belongs to. It runs on no other sites.
 ```
 
 **Are you using remote code?** → **No, I am not using remote code.** All JavaScript ships inside the package.

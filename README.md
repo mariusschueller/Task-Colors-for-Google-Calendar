@@ -8,7 +8,7 @@ A Chrome extension that colors Google Tasks on Google Calendar. You can color ta
 3. Open or reload [Google Calendar](https://calendar.google.com).
 
 ## Use
-- **Color a list:** in Calendar's Tasks side panel, click the **● ▾** button next to the list name ("My Tasks ▾") and pick a color. Or click the toolbar icon, open a list under *Lists*, and pick there.
+- **Color a list:** in Calendar's Tasks side panel, click the **● ▾** button next to the list name ("My Tasks ▾") and pick a color. On [tasks.google.com](https://tasks.google.com), every list column has the same button next to its name. Or click the toolbar icon, open a list under *Lists*, and pick there.
 - **Color one task:** click the task on Calendar, then click the **● ▾** button at the top left of its details popup. You can also search for it under *Tasks* in the toolbar popup. **Default** removes the custom color.
 - A custom task color takes priority over its list's color. Tasks whose list has no color keep Google's default color.
 
