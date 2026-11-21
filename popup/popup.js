@@ -147,7 +147,10 @@ async function init() {
     let report;
     try {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      report = await chrome.tabs.sendMessage(tab.id, { type: 'rcc:diagnostics' }, { frameId: 0 });
+      // Any text in the search box is also looked up in the raw task data the
+      // page received, e.g. the name of a list that doesn't show up.
+      const find = $('search').value.trim();
+      report = await chrome.tabs.sendMessage(tab.id, { type: 'rcc:diagnostics', find }, { frameId: 0 });
     } catch (e) {
       report = { error: `Couldn't reach the extension in this tab (${e.message}). Is this a Google Calendar tab, reloaded after installing/updating the extension?` };
     }

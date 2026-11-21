@@ -112,11 +112,19 @@
     } catch (_) { return null; }
   }
 
+  // Calendar labels task chips "tasks_<taskId>". A task with a deadline gets a
+  // second chip on the deadline's day, "tasks_/dl_<taskId>".
+  const TASK_EVENT_RE = /^tasks_(?:\/[a-z]{1,8}_)?([\w~-]{4,64})$/i;
+  // Calendar's own task chips that stand for no single task, e.g.
+  // "tasks_rollover_view". Real task ids are random base64, never words.
+  const isPseudoId = (id) => /^[a-z]+(?:_[a-z]+)+$/.test(id);
+
   // All plausible task ids encoded in a chip attribute value. Calendar has used
-  // "tasks_<id>" and base64("<id> <owner>")-style values; we try each form.
+  // "tasks_<id>", "tasks_/dl_<id>" and base64("<id> <owner>")-style values; we
+  // try each form.
   function idCandidates(raw) {
     if (!raw) return [];
-    const strip = (s) => s.replace(/^tasks?[_:-]/i, '');
+    const strip = (s) => s.replace(/^tasks?[_:-]/i, '').replace(/^\/[a-z]{1,8}_/i, '');
     const out = new Set([raw, strip(raw)]);
     for (const src of [raw, strip(raw)]) {
       const dec = b64(src);
@@ -154,14 +162,15 @@
     const inner = el.hasAttribute('data-taskid') ? el : el.querySelector('[data-taskid]');
     if (inner) cands.push(...idCandidates(inner.getAttribute('data-taskid')));
     for (const c of cands) if (index.tasks[c]) return c;
+    const labeled = cands.map((c) => TASK_EVENT_RE.exec(c)).find(Boolean);
+    if (labeled && isPseudoId(labeled[1])) return null;
     if (!looksLikeTask(el, cands)) return null;
     const byTitle = matchByTitle(el);
     if (byTitle) return byTitle;
-    // Calendar labels task chips "tasks_<taskId>". Even if that task isn't in
-    // the index yet, use the id so per-task colors and the popup picker still
-    // work; list colors apply once the index learns the task's list.
-    const prefixed = cands.find((c) => /^tasks_[\w~-]{4,64}$/.test(c));
-    if (prefixed) return prefixed.slice(6);
+    // Even if a "tasks_<taskId>" chip's task isn't in the index yet, use the
+    // id so per-task colors and the popup picker still work; list colors
+    // apply once the index learns the task's list.
+    if (labeled) return labeled[1];
     unmatchedTaskLike.add(el.getAttribute('data-eventid'));
     return null;
   }
@@ -427,35 +436,41 @@
   }
 
   // Ask inject.js (MAIN world) for its counters; it answers via postMessage.
-  function mainWorldDiag(ids) {
+  function mainWorldDiag(ids, find) {
     return new Promise((resolve) => {
       const done = (v) => { window.removeEventListener('message', onMsg); resolve(v); };
       const onMsg = (e) => { if (e.source === window && e.data && e.data.__rcc === 'diag') done(e.data.diag); };
       window.addEventListener('message', onMsg);
-      window.postMessage({ __rcc: 'diag?', ids }, location.origin);
+      window.postMessage({ __rcc: 'diag?', ids, find }, location.origin);
       setTimeout(() => done('no reply from inject.js'), 300);
     });
   }
 
-  async function diagnostics() {
+  // find: the popup's search text, looked up in the raw responses inject.js kept.
+  async function diagnostics(find) {
     const short = (s, n) => (s.length > n ? s.slice(0, n) + '…' : s);
     const chips = [...document.querySelectorAll('[data-eventid]')];
     const taskLike = chips.filter((c) => /task/i.test(c.outerHTML));
     const attrNames = new Set();
     for (const e of document.querySelectorAll('*')) for (const a of e.attributes) if (/task/i.test(a.name)) attrNames.add(a.name);
+    const lists = C.allLists(index);
+    // Lists that tasks point to but whose own record we never parsed.
+    const unnamed = lists.filter((l) => !index.lists[l.id]).map((l) => l.id);
+    const st = stats();
     return {
       extension: chrome.runtime.getManifest().version,
       view: location.pathname,
-      ...stats(),
+      ...st,
       cachedLists: Object.keys(index.lists).length,
       cachedTasks: Object.keys(index.tasks).length,
+      lists: lists.map((l) => `${index.lists[l.id] ? l.name : `(no name) ${l.id}`}: ${l.count} tasks`),
       sampleCachedTaskIds: Object.keys(index.tasks).slice(0, 5),
       sampleEventIds: chips.slice(0, 12).map((c) => c.getAttribute('data-eventid')),
       taskLikeChipCount: taskLike.length,
       taskLikeChipHtml: taskLike.slice(0, 2).map((c) => short(c.outerHTML, 1500)),
       attributesNamedTask: [...attrNames],
       iframes: [...document.querySelectorAll('iframe')].map((f) => (f.src || '(no src)').split('?')[0]),
-      dataCapture: await mainWorldDiag(stats().chipTasksNotIndexed.slice(0, 2)),
+      dataCapture: await mainWorldDiag([...st.chipTasksNotIndexed.slice(0, 2), ...unnamed.slice(0, 2)], find),
       requests: [...new Set(performance.getEntriesByType('resource').map((r) => r.name.split('?')[0]))]
         .filter((u) => !/\.(js|css|png|svg|woff2?|gif|jpe?g|ico|webp)$/.test(u))
         .slice(0, 40),
@@ -465,6 +480,6 @@
   chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
     if (!msg) return;
     if (msg.type === 'rcc:stats') reply(stats());
-    else if (msg.type === 'rcc:diagnostics') { diagnostics().then(reply); return true; }
+    else if (msg.type === 'rcc:diagnostics') { diagnostics(msg.find).then(reply); return true; }
   });
 })();

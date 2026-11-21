@@ -61,6 +61,17 @@
     return { id: r[0], name: meta[0].slice(0, 200), members };
   }
 
+  // Any ["<id>", ["<name>", ...], ...] record with a timestamp. Too loose to
+  // trust alone; extract() uses it only to name a list that this payload's
+  // tasks point to but whose record didn't fit asList (say, extra metadata).
+  function asLooseList(r) {
+    if (r.length < 3 || typeof r[0] !== 'string' || !ID_RE.test(r[0])) return null;
+    const meta = r[1];
+    if (!Array.isArray(meta) || typeof meta[0] !== 'string' || !meta[0].trim()) return null;
+    if (!r.some(isTs)) return null;
+    return { id: r[0], name: meta[0].slice(0, 200) };
+  }
+
   // Task ids nested in a list record's ordering field, e.g. [[["id1"], ["id2"]]].
   function collectIds(v, out, depth) {
     if (depth > 8 || out.length > 5000) return;
@@ -72,6 +83,7 @@
     const lists = {};
     const tasks = {};
     const membership = {}; // taskId -> listId, from list records
+    const loose = {}; // listId -> name, from records only asLooseList accepts
     const stack = [[root, 0]];
     let n = 0;
     while (stack.length) {
@@ -93,12 +105,19 @@
           if (l) {
             lists[l.id] = l.name;
             for (const tid of l.members) if (tid !== l.id) membership[tid] = l.id;
+          } else {
+            const ll = asLooseList(v);
+            if (ll && !(ll.id in loose)) loose[ll.id] = ll.name;
           }
         }
         for (let i = 0; i < v.length; i++) if (v[i] && typeof v[i] !== 'number') stack.push([v[i], d + 1]);
       } else {
         for (const k in v) stack.push([v[k], d + 1]);
       }
+    }
+    const usedLists = new Set(Object.values(tasks).map((t) => t.listId));
+    for (const [id, name] of Object.entries(loose)) {
+      if (!lists[id] && usedLists.has(id)) lists[id] = name;
     }
     // Backup: tasks we only know through their list's membership. No title;
     // background.js keeps any title learned elsewhere.

@@ -15,25 +15,46 @@
   const note = (arr, v) => { if (arr.length < 20 && !arr.includes(v)) arr.push(v); };
   // Last few responses that passed the shape pre-filter, kept so diagnostics
   // can show the raw format around a task id that failed to parse.
+  // A full TasksApiService/Sync of a large account can run to megabytes.
   const recent = [];
   const keep = (url, text) => {
-    if (text.length > 1e6) return;
+    if (text.length > 4e6) return;
     recent.push({ url, text });
-    if (recent.length > 2) recent.shift();
+    if (recent.length > 3) recent.shift();
   };
+  const excerpt = (text, i) => text.slice(Math.max(0, i - 200), i + 600);
   function contextFor(ids) {
     const out = {};
     for (const id of ids || []) {
       if (typeof id !== 'string' || !/^[\w~-]{4,64}$/.test(id)) continue;
       for (const { url, text } of recent) {
-        const i = text.indexOf(id);
+        // Prefer the id's own record, ["<id>",..., over a mention elsewhere.
+        let i = text.indexOf(`["${id}",`);
+        if (i < 0) i = text.indexOf(id);
         if (i < 0) continue;
-        out[id] = { url, context: text.slice(Math.max(0, i - 200), i + 600) };
+        out[id] = { url, context: excerpt(text, i) };
         break;
       }
       if (!out[id]) out[id] = 'not found in captured responses';
     }
     return out;
+  }
+  // Where some text (e.g. a list name that never showed up) appears in the
+  // kept responses: as a whole JSON string if it does, else anywhere.
+  function findText(term) {
+    if (typeof term !== 'string' || term.length < 2 || term.length > 100) return undefined;
+    const t = term.toLowerCase();
+    for (const needle of [`"${t}"`, `\\"${t}\\"`, t]) {
+      const out = [];
+      for (const { url, text } of recent) {
+        const lower = text.toLowerCase();
+        for (let i = lower.indexOf(needle); i >= 0 && out.length < 3; i = lower.indexOf(needle, i + needle.length)) {
+          out.push({ url, context: excerpt(text, i) });
+        }
+      }
+      if (out.length) return out;
+    }
+    return 'not found in captured responses';
   }
 
   function post(r, source) {
@@ -49,7 +70,10 @@
     if (e.data.__rcc === 'hello') {
       window.postMessage({ __rcc: 'index', lists: found.lists, tasks: found.tasks }, location.origin);
     } else if (e.data.__rcc === 'diag?') {
-      window.postMessage({ __rcc: 'diag', diag: { ...diag, idContext: contextFor(e.data.ids) } }, location.origin);
+      window.postMessage({
+        __rcc: 'diag',
+        diag: { ...diag, idContext: contextFor(e.data.ids), searchText: findText(e.data.find) },
+      }, location.origin);
     }
   });
 
